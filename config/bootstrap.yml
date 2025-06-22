@@ -1,0 +1,11 @@
+app:
+  config:
+    nacos:
+      addr: 47.104.212.220
+      port: 8848
+      namespace: c397c7d8-5769-40e6-b7a4-073d86658b45
+      timeout: 5000
+      is_load_cache: false
+      log_level: debug
+      data_id: lark_lite
+      group: DEFAULT_GROUP

@@ -1,0 +1,9 @@
+syntax = "proto3";
+package common;
+
+option go_package = "common";
+
+message BaseResponse {
+  int32 code = 1; // 0: success, other: error code
+  string message = 2; // error message
+}
