@@ -1,0 +1,75 @@
+syntax = "proto3";
+package user;
+
+option go_package = "user";
+
+import "common/idl/common.proto";
+
+service UserService {
+  rpc Register (RegisterRequest) returns (UserAuthInfoResponse);
+  rpc Login    (LoginRequest)    returns (UserAuthInfoResponse);
+  rpc Refresh  (RefreshRequest)  returns (AuthResponse);
+  rpc Update   (UpdateRequest)   returns (common.BaseResponse);
+// TODO: rpc GetUser (GetUserRequest) returns (GetUser);
+  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse);
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RefreshRequest  {
+  string refresh_token = 1;
+}
+
+message UpdateRequest {
+  int64  user_id        = 1;
+  string email          = 2;
+  string name           = 3;
+  string nickname       = 4;
+  string avatar_url     = 5;
+  string background_url = 6;
+  string signature      = 7;
+  string phone          = 8;
+  int32  gender         = 9;
+}
+
+message TokenPair {
+  string access_token  = 1;
+  int64 access_expires_in     = 2;
+  string refresh_token = 3;
+  int64 refresh_expires_in = 4;
+
+}
+
+message UserAuthInfo {
+  int64 user_id = 1;
+  string username = 2;
+  string nickname = 4;
+  string avatar_url = 5;
+  TokenPair token = 6;
+}
+
+message UserAuthInfoResponse {
+  common.BaseResponse resp = 1;
+  UserAuthInfo user = 2;
+}
+
+message AuthResponse {
+  common.BaseResponse resp = 1;
+  TokenPair token = 2;
+}
+
+message GetUserInfoRequest {
+  int64 user_id = 1;
+}
+
+message GetUserInfoResponse {
+  // TODO
+}
