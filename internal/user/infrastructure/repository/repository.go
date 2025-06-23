@@ -11,7 +11,11 @@ import (
 	"github.com/Wenrh2004/lark-lite-server/pkg/transaction"
 )
 
-const ctxTxKey = "TxKey"
+// ctxTxKeyType is an unexported type to avoid collisions in context keys.
+type ctxTxKeyType string
+
+// ctxTxKey is the key for storing transaction in context.
+const ctxTxKey ctxTxKeyType = "TxKey"
 
 type Repository struct {
 	query  *query.Query

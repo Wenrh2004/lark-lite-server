@@ -69,7 +69,6 @@ func (h *UserHandler) Register(ctx context.Context, c *app.RequestContext) {
 			ExpiresIn:   resp.User.Token.GetAccessExpiresIn(),
 		},
 	})
-	return
 }
 
 func (h *UserHandler) Login(ctx context.Context, c *app.RequestContext) {
@@ -116,7 +115,6 @@ func (h *UserHandler) Login(ctx context.Context, c *app.RequestContext) {
 			ExpiresIn:   resp.User.Token.GetAccessExpiresIn(),
 		},
 	})
-	return
 }
 
 func (h *UserHandler) Refresh(ctx context.Context, c *app.RequestContext) {
@@ -158,5 +156,4 @@ func (h *UserHandler) Refresh(ctx context.Context, c *app.RequestContext) {
 		Certificate: resp.Token.GetAccessToken(),
 		ExpiresIn:   resp.Token.GetAccessExpiresIn(),
 	})
-	return
 }

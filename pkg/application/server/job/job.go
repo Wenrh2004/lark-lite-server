@@ -36,7 +36,7 @@ func (j *Server) Start() {
 }
 
 func (j *Server) Stop() {
-	err := j.PushConsumer.Shutdown()
+	err := j.Shutdown()
 	if err != nil {
 		panic(err)
 	}

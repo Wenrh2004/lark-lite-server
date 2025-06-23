@@ -34,8 +34,7 @@ const (
 type Username string
 
 func NewUsername(name string) Username {
-	var username Username
-	username = Username(name)
+	username := Username(name)
 	return username
 }
 
@@ -46,9 +45,8 @@ func (u *Username) String() string {
 type Password string
 
 func NewPassword(password string) Password {
-	var pwd Password
 	// TODO: add the password encryption logic here
-	pwd = Password(password)
+	pwd := Password(password)
 	return pwd
 }
 

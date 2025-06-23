@@ -11,7 +11,11 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-const ctxLoggerKey = "zapLogger"
+// ctxLoggerKeyType is an unexported type to avoid collisions in context keys.
+type ctxLoggerKeyType string
+
+// ctxLoggerKey is the key for storing Logger in context.
+const ctxLoggerKey ctxLoggerKeyType = "zapLogger"
 
 type Logger struct {
 	*zap.Logger
