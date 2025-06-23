@@ -1,0 +1,34 @@
+package main
+
+import (
+	"context"
+	"flag"
+	"fmt"
+
+	"go.uber.org/zap"
+
+	"github.com/Wenrh2004/lark-lite-server/cmd/server/user/wire"
+	"github.com/Wenrh2004/lark-lite-server/pkg/application/config"
+	"github.com/Wenrh2004/lark-lite-server/pkg/bootstrap"
+	"github.com/Wenrh2004/lark-lite-server/pkg/log"
+)
+
+func main() {
+	var envConf = flag.String("conf", "config/bootstrap.yml", "boot path, eg: -conf ./config/bootstrap.yml")
+	flag.Parse()
+	boot := bootstrap.NewBootstrap(*envConf)
+	conf := config.NewConfig(boot).GetConfig()
+
+	logger := log.NewLog(conf)
+
+	app, cleanup, err := wire.NewWire(conf, logger)
+	defer cleanup()
+	if err != nil {
+		panic(err)
+	}
+	logger.Info("server start", zap.String("host", fmt.Sprintf("http://loaclhost%s%s", conf.GetString("app.addr"), conf.GetString("app.base_url"))))
+	logger.Info("docs addr", zap.String("addr", fmt.Sprintf("http://localhost%s%s/swagger/index.html", conf.GetString("app.addr"), conf.GetString("app.base_url"))))
+	if err = app.Run(context.Background()); err != nil {
+		panic(err)
+	}
+}

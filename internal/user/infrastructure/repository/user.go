@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Wenrh2004/lark-lite-server/internal/user/domain/service"
+	"github.com/Wenrh2004/lark-lite-server/internal/user/domain"
 	"github.com/Wenrh2004/lark-lite-server/internal/user/infrastructure/model"
 )
 
@@ -12,7 +12,7 @@ type UserRepository struct {
 	repo *Repository
 }
 
-func (u *UserRepository) CreateUser(ctx context.Context, user *service.User) (*service.User, error) {
+func (u *UserRepository) CreateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
 	if err := u.repo.query.User.WithContext(ctx).Create(&model.User{
 		ID:       user.ID,
 		Username: user.Username.String(),
@@ -24,22 +24,22 @@ func (u *UserRepository) CreateUser(ctx context.Context, user *service.User) (*s
 	return user, nil
 }
 
-func (u *UserRepository) UpdateUser(ctx context.Context, user *service.User) (*service.User, error) {
+func (u *UserRepository) UpdateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u *UserRepository) GetUserByID(ctx context.Context, id uint64) (*service.User, error) {
+func (u *UserRepository) GetUserByID(ctx context.Context, id uint64) (*domain.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func (u *UserRepository) GetUser(ctx context.Context, user *service.User) (*service.User, error) {
+func (u *UserRepository) GetUser(ctx context.Context, user *domain.User) (*domain.User, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
-func NewUserRepository(repo *Repository) service.UserRepository {
+func NewUserRepository(repo *Repository) domain.UserRepository {
 	return &UserRepository{
 		repo: repo,
 	}

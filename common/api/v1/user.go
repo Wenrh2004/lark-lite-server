@@ -19,7 +19,7 @@ type UserAuthResponse struct {
 }
 
 type UserCertificateResponseBody struct {
-	Certificate string `json:"token"`
+	Certificate string `json:"certificate"`
 	ExpiresIn   int64  `json:"expires_in"`
 }
 

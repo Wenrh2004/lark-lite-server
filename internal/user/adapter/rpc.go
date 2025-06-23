@@ -5,16 +5,18 @@ import (
 
 	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/common"
 	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/user"
-	"github.com/Wenrh2004/lark-lite-server/internal/user/domain/service"
+	"github.com/Wenrh2004/lark-lite-server/internal/user/domain"
+	"github.com/Wenrh2004/lark-lite-server/pkg/adapter"
 )
 
 type UserServiceImpl struct {
-	service service.UserService
+	srv         *adapter.Service
+	userService domain.UserService
 }
 
 func (u *UserServiceImpl) Register(ctx context.Context, req *user.RegisterRequest) (res *user.UserAuthInfoResponse, err error) {
-	newUser := service.NewUser(req.Username, req.Password)
-	ur, err := u.service.Register(ctx, newUser)
+	newUser := domain.NewUser(req.Username, req.Password)
+	ur, err := u.userService.Register(ctx, newUser)
 	if err != nil {
 		return nil, err
 	}
@@ -28,18 +30,18 @@ func (u *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReques
 		Nickname:  string(ur.Nickname),
 		AvatarUrl: ur.AvatarURL,
 		Token: &user.TokenPair{
-			AccessToken:      ur.AccessToken,
-			AccessExpiresIn:  ur.AccessExpiresIn,
-			RefreshToken:     ur.RefreshToken,
-			RefreshExpiresIn: ur.RefreshExpiresIn,
+			AccessToken:      ur.TokenPair.AccessToken.Token,
+			AccessExpiresIn:  ur.TokenPair.AccessToken.ExpiresIn,
+			RefreshToken:     ur.TokenPair.RefreshToken.Token,
+			RefreshExpiresIn: ur.TokenPair.RefreshToken.ExpiresIn,
 		},
 	}
 	return res, nil
 }
 
 func (u *UserServiceImpl) Login(ctx context.Context, req *user.LoginRequest) (res *user.UserAuthInfoResponse, err error) {
-	newUser := service.NewUser(req.Username, req.Password)
-	ur, err := u.service.Login(ctx, newUser)
+	newUser := domain.NewUser(req.Username, req.Password)
+	ur, err := u.userService.Login(ctx, newUser)
 	if err != nil {
 		return nil, err
 	}
@@ -53,10 +55,10 @@ func (u *UserServiceImpl) Login(ctx context.Context, req *user.LoginRequest) (re
 		Nickname:  string(ur.Nickname),
 		AvatarUrl: ur.AvatarURL,
 		Token: &user.TokenPair{
-			AccessToken:      ur.AccessToken,
-			AccessExpiresIn:  ur.AccessExpiresIn,
-			RefreshToken:     ur.RefreshToken,
-			RefreshExpiresIn: ur.RefreshExpiresIn,
+			AccessToken:      ur.TokenPair.AccessToken.Token,
+			AccessExpiresIn:  ur.TokenPair.AccessToken.ExpiresIn,
+			RefreshToken:     ur.TokenPair.RefreshToken.Token,
+			RefreshExpiresIn: ur.TokenPair.RefreshToken.ExpiresIn,
 		},
 	}
 	return res, nil
@@ -75,4 +77,11 @@ func (u *UserServiceImpl) Update(ctx context.Context, req *user.UpdateRequest) (
 func (u *UserServiceImpl) GetUserInfo(ctx context.Context, req *user.GetUserInfoRequest) (res *user.GetUserInfoResponse, err error) {
 	// TODO implement me
 	panic("implement me")
+}
+
+func NewUserServiceImpl(srv *adapter.Service, userService domain.UserService) *UserServiceImpl {
+	return &UserServiceImpl{
+		srv:         srv,
+		userService: userService,
+	}
 }

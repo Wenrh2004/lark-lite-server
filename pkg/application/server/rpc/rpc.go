@@ -24,16 +24,16 @@ func NewServer(server server.Server, logger *log.Logger, opts ...Option) *Server
 	return s
 }
 
-func (h *Server) Start() {
-	if err := h.Run(); err != nil {
-		h.logger.Sugar().Fatalf("listen: %s\n", err)
+func (s *Server) Start() {
+	if err := s.Run(); err != nil {
+		s.logger.Sugar().Fatalf("listen: %s\n", err)
 	}
 }
 
-func (h *Server) Stop() {
-	h.logger.Sugar().Info("Shutting down server...")
-	if err := h.Server.Stop(); err != nil {
-		h.logger.Sugar().Errorf("server stop error: %v", err)
+func (s *Server) Stop() {
+	s.logger.Sugar().Info("Shutting down server...")
+	if err := s.Server.Stop(); err != nil {
+		s.logger.Sugar().Errorf("server stop error: %v", err)
 	}
-	h.logger.Sugar().Info("Server exiting")
+	s.logger.Sugar().Info("Server exiting")
 }

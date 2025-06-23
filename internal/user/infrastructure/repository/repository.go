@@ -1,11 +1,14 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 
 	"github.com/Wenrh2004/lark-lite-server/internal/user/infrastructure/repository/query"
 	"github.com/Wenrh2004/lark-lite-server/pkg/log"
+	"github.com/Wenrh2004/lark-lite-server/pkg/transaction"
 )
 
 const ctxTxKey = "TxKey"
@@ -27,4 +30,15 @@ func NewRepository(
 		rdb:    rdb,
 		logger: logger,
 	}
+}
+
+func NewTransaction(r *Repository) transaction.Transaction {
+	return r
+}
+
+func (r *Repository) Transaction(ctx context.Context, fn func(ctx context.Context) error) error {
+	return query.Q.Transaction(func(tx *query.Query) error {
+		ctx = context.WithValue(ctx, ctxTxKey, tx)
+		return fn(ctx)
+	})
 }
