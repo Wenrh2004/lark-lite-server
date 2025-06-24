@@ -1,0 +1,46 @@
+syntax = "proto3";
+package file;
+option go_package = "file";
+
+service FileService {
+  // 准备上传：支持秒传
+  rpc PrepareUpload(PrepareUploadReq) returns (PrepareUploadResp);
+  // 客户端上传后确认
+  rpc CompleteUpload(CompleteUploadReq) returns (CompleteUploadResp);
+  // 其他业务域查询文件状态
+  rpc GetFileStatus(GetFileStatusReq) returns (GetFileStatusResp);
+}
+
+message PrepareUploadReq {
+  string domain = 1; // 业务域
+  string file_name = 2;
+  int64 size      = 3;
+  string md5      = 4;
+  string content_type = 5;
+}
+
+message PrepareUploadResp {
+  bool   exists      = 1; // true=秒传
+  uint64 file_id     = 2;
+  string upload_url  = 3; // 不存在时，presigned PUT URL
+  string access_url  = 4; // 已存在或完成后可直接访问的 URL
+}
+
+message CompleteUploadReq {
+  uint64 file_id = 1;
+  uint64 upload_by = 6; // 上传者 ID
+}
+
+message CompleteUploadResp {
+  bool success    = 1;
+}
+
+message GetFileStatusReq {
+  uint64 file_id = 1;
+}
+
+message GetFileStatusResp {
+  enum Status { PENDING = 0; UPLOADED = 1; FAILED = 2; }
+  Status status    = 1;
+  string access_url = 2;
+}

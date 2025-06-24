@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"gorm.io/gen"
-	"gorm.io/gen/field"
 	"gorm.io/gorm"
 
 	"github.com/Wenrh2004/lark-lite-server/pkg/application/config"
@@ -15,8 +14,8 @@ import (
 )
 
 const (
-	queryPath = "./internal/user/infrastructure/repository/query"
-	modelPath = "./internal/user/infrastructure/model"
+	queryPath = "./internal/file/infrastructure/repository/query"
+	modelPath = "./internal/file/infrastructure/model"
 )
 
 func main() {
@@ -73,18 +72,15 @@ func main() {
 
 	g.WithDataTypeMap(dataMap)
 
-	isDeleteField := gen.FieldGORMTag("is_deleted", func(tag field.GormTag) field.GormTag {
-		return field.GormTag{}.Set("column", "is_deleted").Set("type", "tinyint(1)").Set("", "not null").Set("softDelete", "flag").Set("DeletedAtField", "DeletedAt").Set("comment", "是否删除")
-	})
-	softDeleteField := gen.FieldType("is_deleted", "soft_delete.DeletedAt")
+	// softDeleteField := gen.FieldType("is_deleted", "soft_delete.DeletedAt")
 	// idField := gen.FieldGORMTag("id", func(tag field.GormTag) field.GormTag {
 	// 	return field.GormTag{}.Set("column", "id").Set("type", "bigint(20)").Set("", "not null").Set("primaryKey", "flag").Set("autoIncrement", "flag").Set("comment", "主键")
 	// })
 	// sidField := gen.FieldType("id", "uint64")
-	fieldOpts := []gen.ModelOpt{isDeleteField, softDeleteField}
 
 	g.ApplyBasic(
-		g.GenerateModel("users", fieldOpts...),
+		g.GenerateModel("files"),
+		g.GenerateModel("file_users"),
 	)
 
 	// Generate the code

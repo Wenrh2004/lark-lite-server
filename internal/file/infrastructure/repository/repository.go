@@ -6,20 +6,17 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 
-	"github.com/Wenrh2004/lark-lite-server/internal/user/infrastructure/repository/query"
+	"github.com/Wenrh2004/lark-lite-server/internal/file/infrastructure/repository/query"
+	"github.com/Wenrh2004/lark-lite-server/internal/file/infrastructure/third/oss"
 	"github.com/Wenrh2004/lark-lite-server/pkg/log"
 	"github.com/Wenrh2004/lark-lite-server/pkg/transaction"
 )
 
-// ctxTxKeyType is an unexported type to avoid collisions in context keys.
-type ctxTxKeyType struct{}
-
-// ctxTxKey is the key for storing transaction in context.
-var ctxTxKey = ctxTxKeyType{}
+const ctxTxKey = "TxKey"
 
 type Repository struct {
-	query  *query.Query
 	rdb    *redis.Client
+	oss    oss.Service
 	logger *log.Logger
 }
 
@@ -27,11 +24,12 @@ func NewRepository(
 	logger *log.Logger,
 	db *gorm.DB,
 	rdb *redis.Client,
+	oss oss.Service,
 ) *Repository {
 	query.SetDefault(db)
 	return &Repository{
-		query:  query.Q,
 		rdb:    rdb,
+		oss:    oss,
 		logger: logger,
 	}
 }
