@@ -157,3 +157,80 @@ func (h *UserHandler) Refresh(ctx context.Context, c *app.RequestContext) {
 		ExpiresIn:   resp.Token.GetAccessExpiresIn(),
 	})
 }
+
+func (h *UserHandler) GetUserInfo(ctx context.Context, c *app.RequestContext) {
+	userIDStr := c.GetString("user_id")
+	userID, err := strconv.ParseInt(userIDStr, 10, 64)
+	if err != nil {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] invalid user_id", zap.Error(err))
+		v1.HandlerError(c, v1.ErrBadRequest)
+		return
+	}
+
+	resp, err := h.cli.GetUserInfo(ctx, &user.GetUserInfoRequest{
+		UserId: userID,
+	})
+	if err != nil {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] GetUserInfo failed", zap.Error(err))
+		v1.HandlerError(c, v1.ErrInternalServerError)
+		return
+	}
+	if resp.Resp.Code != 0 {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] GetUserInfo business error", zap.Any("resp", resp))
+		v1.HandlerError(c, v1.Error{
+			Code:    int(resp.Resp.Code),
+			Message: resp.Resp.Message,
+		})
+		return
+	}
+
+	v1.HandlerSuccess(c, &v1.UserAuthResponseBody{
+		UserId:    strconv.FormatInt(resp.User.UserId, 10),
+		Username:  resp.User.Username,
+		Nickname:  resp.User.Nickname,
+		AvatarUrl: resp.User.AvatarUrl,
+	})
+}
+
+func (h *UserHandler) UpdateUser(ctx context.Context, c *app.RequestContext) {
+	var req v1.UpdateUserRequest
+	if err := c.Bind(&req); err != nil {
+		v1.HandlerError(c, v1.ErrBadRequest)
+		return
+	}
+
+	userIDStr := c.GetString("user_id")
+	userID, err := strconv.ParseInt(userIDStr, 10, 64)
+	if err != nil {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] invalid user_id", zap.Error(err))
+		v1.HandlerError(c, v1.ErrBadRequest)
+		return
+	}
+
+	resp, err := h.cli.UpdateUser(ctx, &user.UpdateUserRequest{
+		UserId:    userID,
+		Nickname:  req.Nickname,
+		AvatarUrl: req.AvatarUrl,
+	})
+	if err != nil {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] UpdateUser failed", zap.Error(err))
+		v1.HandlerError(c, v1.ErrInternalServerError)
+		return
+	}
+	if resp.Resp.Code != 0 {
+		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] UpdateUser business error", zap.Any("resp", resp))
+		v1.HandlerError(c, v1.Error{
+			Code:    int(resp.Resp.Code),
+			Message: resp.Resp.Message,
+		})
+		return
+	}
+
+	v1.HandlerSuccess(c, &v1.UserAuthResponseBody{
+		UserId:    strconv.FormatInt(resp.User.UserId, 10),
+		Username:  resp.User.Username,
+		Nickname:  resp.User.Nickname,
+		AvatarUrl: resp.User.AvatarUrl,
+	})
+}
+
