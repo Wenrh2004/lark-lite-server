@@ -3,8 +3,8 @@ package application
 import (
 	"github.com/spf13/viper"
 
-	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/user/userservice"
 	"github.com/Wenrh2004/lark-lite-server/internal/user/adapter"
+	"github.com/Wenrh2004/lark-lite-server/kitex_gen/user/userservice"
 	"github.com/Wenrh2004/lark-lite-server/pkg/application/server/http"
 	"github.com/Wenrh2004/lark-lite-server/pkg/application/server/rpc"
 	"github.com/Wenrh2004/lark-lite-server/pkg/log"
@@ -73,10 +73,11 @@ func NewUserHTTPApplication(conf *viper.Viper, logger *log.Logger, handler *adap
 	// 不需要认证的路由
 	userGroup.POST("/login", handler.Login)
 	userGroup.POST("/register", handler.Register)
+	userGroup.POST("/upload", handler.UploadFile)
 
 	// 需要认证的路由
-    userGroup.GET("/info", handler.GetUserInfo)
-    userGroup.PUT("/update", handler.UpdateUser)
+	userGroup.GET("/info", handler.GetUserInfo)
+	userGroup.PUT("/update", handler.UpdateUser)
 	return h
 }
 

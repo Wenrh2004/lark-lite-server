@@ -12,6 +12,7 @@ type UserService interface {
 	Register(ctx context.Context, user *User) (*User, error)
 	GetUserByID(ctx context.Context, id uint64) (*User, error)
 	GetUser(ctx context.Context, user *User) (*User, error)
+	UpdateUser(ctx context.Context, user *User) (*User, error)
 }
 
 type userService struct {
@@ -61,6 +62,18 @@ func (u *userService) GetUserByID(ctx context.Context, id uint64) (*User, error)
 func (u *userService) GetUser(ctx context.Context, user *User) (*User, error) {
 	// TODO implement me
 	panic("implement me")
+}
+
+func (u *userService) UpdateUser(ctx context.Context, user *User) (*User, error) {
+	_, err := u.repo.GetUserByID(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	updated, err := u.repo.UpdateUser(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	return updated, nil
 }
 
 func NewUserService(srv *domain.Service, repo UserRepository) UserService {

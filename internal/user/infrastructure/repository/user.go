@@ -25,8 +25,22 @@ func (u *UserRepository) CreateUser(ctx context.Context, user *domain.User) (*do
 }
 
 func (u *UserRepository) UpdateUser(ctx context.Context, user *domain.User) (*domain.User, error) {
-	// TODO implement me
-	panic("implement me")
+	update := map[string]interface{}{
+		"nickname":       user.Nickname.String(),
+		"avatar_url":     user.AvatarURL,
+		"background_url": user.BackgroundURL,
+		"signature":      user.Signature,
+		"email":          user.Email,
+		"phone":          user.Phone,
+		"gender":         byte(user.Gender),
+	}
+	_, err := u.repo.query.User.WithContext(ctx).
+		Where(u.repo.query.User.ID.Eq(user.ID)).
+		Updates(update)
+	if err != nil {
+		return nil, fmt.Errorf("[Infrastructure.Repository.User]failed to update user: %w", err)
+	}
+	return user, nil
 }
 
 func (u *UserRepository) GetUserByID(ctx context.Context, id uint64) (*domain.User, error) {
