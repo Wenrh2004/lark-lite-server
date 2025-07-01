@@ -71,5 +71,7 @@ message GetUserInfoRequest {
 }
 
 message GetUserInfoResponse {
-  // TODO
+  common.BaseResponse resp = 1;
+  UserAuthInfo user = 2;
 }
+
