@@ -12,6 +12,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/wire v0.6.0
 	github.com/hertz-contrib/swagger v0.1.1
+	github.com/hertz-contrib/websocket v0.2.0
 	github.com/kitex-contrib/registry-nacos/v2 v2.0.0-20250312112926-3d89dd64eadf
 	github.com/minio/minio-go/v7 v7.0.94
 	github.com/nacos-group/nacos-sdk-go/v2 v2.3.2

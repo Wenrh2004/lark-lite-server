@@ -14,6 +14,11 @@ import (
 	"github.com/Wenrh2004/lark-lite-server/pkg/adapter"
 )
 
+const (
+	UserRefreshTokenName = "UserRefreshToken"
+	UserRefreshTokenPath = "/api/v1/user/refresh"
+)
+
 type UserHandler struct {
 	srv *adapter.Service
 	cli userservice.Client
@@ -118,7 +123,7 @@ func (h *UserHandler) Login(ctx context.Context, c *app.RequestContext) {
 }
 
 func (h *UserHandler) Refresh(ctx context.Context, c *app.RequestContext) {
-	refreshToken := c.Request.Header.Cookie("UserrefreshToken")
+	refreshToken := c.Request.Header.Cookie("UserRefreshToken")
 
 	if len(refreshToken) == 0 {
 		h.srv.Logger.WithContext(ctx).Error("[Adapter.User] refresh token is empty")
@@ -143,10 +148,10 @@ func (h *UserHandler) Refresh(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	c.SetCookie(
-		"UserRefreshToken",
+		UserRefreshTokenName,
 		resp.Token.RefreshToken,
 		int(resp.Token.GetRefreshExpiresIn()),
-		"/api/v1/user/refresh",
+		UserRefreshTokenPath,
 		"",
 		protocol.CookieSameSiteStrictMode,
 		true,

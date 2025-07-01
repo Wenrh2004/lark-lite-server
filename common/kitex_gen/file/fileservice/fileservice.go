@@ -5,11 +5,13 @@ package fileservice
 import (
 	"context"
 	"errors"
-	file "github.com/Wenrh2004/lark-lite-server/kitex_gen/file"
+
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
 	proto "github.com/cloudwego/prutal"
+
+	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/file"
 )
 
 var errInvalidMessageType = errors.New("invalid message type for service method handler")

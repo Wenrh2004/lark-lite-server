@@ -4,25 +4,25 @@ package common
 
 import "github.com/cloudwego/prutal"
 
-type BaseResponse struct {
+type BaseResp struct {
 	Code    int32  `protobuf:"varint,1,opt,name=code" json:"code,omitempty"`      // 0: success, other: error code
 	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty"` // error message
 }
 
-func (x *BaseResponse) Reset() { *x = BaseResponse{} }
+func (x *BaseResp) Reset() { *x = BaseResp{} }
 
-func (x *BaseResponse) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
+func (x *BaseResp) Marshal(in []byte) ([]byte, error) { return prutal.MarshalAppend(in, x) }
 
-func (x *BaseResponse) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
+func (x *BaseResp) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *BaseResponse) GetCode() int32 {
+func (x *BaseResp) GetCode() int32 {
 	if x != nil {
 		return x.Code
 	}
 	return 0
 }
 
-func (x *BaseResponse) GetMessage() string {
+func (x *BaseResp) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}

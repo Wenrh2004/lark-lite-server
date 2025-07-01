@@ -523,10 +523,10 @@ func (p *UpdateArgs) GetFirstArgument() interface{} {
 }
 
 type UpdateResult struct {
-	Success *common.BaseResponse
+	Success *common.BaseResp
 }
 
-var UpdateResult_Success_DEFAULT *common.BaseResponse
+var UpdateResult_Success_DEFAULT *common.BaseResp
 
 func (p *UpdateResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
@@ -536,7 +536,7 @@ func (p *UpdateResult) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *UpdateResult) Unmarshal(in []byte) error {
-	msg := new(common.BaseResponse)
+	msg := new(common.BaseResp)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -544,7 +544,7 @@ func (p *UpdateResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *UpdateResult) GetSuccess() *common.BaseResponse {
+func (p *UpdateResult) GetSuccess() *common.BaseResp {
 	if !p.IsSetSuccess() {
 		return UpdateResult_Success_DEFAULT
 	}
@@ -552,7 +552,7 @@ func (p *UpdateResult) GetSuccess() *common.BaseResponse {
 }
 
 func (p *UpdateResult) SetSuccess(x interface{}) {
-	p.Success = x.(*common.BaseResponse)
+	p.Success = x.(*common.BaseResp)
 }
 
 func (p *UpdateResult) IsSetSuccess() bool {
@@ -714,7 +714,7 @@ func (p *kClient) Refresh(ctx context.Context, Req *user.RefreshRequest) (r *use
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) Update(ctx context.Context, Req *user.UpdateRequest) (r *common.BaseResponse, err error) {
+func (p *kClient) Update(ctx context.Context, Req *user.UpdateRequest) (r *common.BaseResp, err error) {
 	var _args UpdateArgs
 	_args.Req = Req
 	var _result UpdateResult

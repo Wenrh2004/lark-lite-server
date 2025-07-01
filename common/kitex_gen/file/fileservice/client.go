@@ -4,9 +4,11 @@ package fileservice
 
 import (
 	"context"
-	file "github.com/Wenrh2004/lark-lite-server/kitex_gen/file"
+
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+
+	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/file"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package collaboration.awareness;
+
+option go_package = "collaboration/awareness";
+
+import "common/idl/common.proto";
+
+// 协同编辑服务
+service AwarenessService {
+  // 双向流式RPC，用于实时协同编辑
+  rpc Collaborate(stream ClientMessage) returns (stream ServerMessage);
+  // 获取在线用户列表
+  rpc GetActiveUsers(GetActiveUsersRequest) returns (GetActiveUsersResponse);
+}
+
+// 客户端发送的消息
+message ClientMessage {
+  string user_id = 1;
+  string document_id = 2;
+  int64 timestamp = 3;
+
+  oneof content {
+    AwarenessUpdate awareness = 4;
+    JoinDocument join_document = 5;
+    LeaveDocument leave_document = 6;
+    HeartBeat heartbeat = 7;
+  }
+}
+
+// 服务端发送的消息
+message ServerMessage {
+  string user_id = 1;
+  string document_id = 2;
+  int64 timestamp = 3;
+
+  oneof content {
+    AwarenessUpdate awareness = 4;
+    UserJoined user_joined = 5;
+    UserLeft user_left = 6;
+    ActiveUser active_user = 7;
+    common.BaseResp error = 8;
+  }
+}
+
+// Y.js 同步请求
+message SyncRequest {
+  // Y.js state vector
+  bytes state_vector = 1;
+}
+
+// Y.js 同步响应
+message SyncResponse {
+  // Y.js update binary data
+  bytes update_data = 1;
+}
+
+// Y.js 更新消息
+message UpdateMessage {
+  // Y.js update binary data
+  bytes update_data = 1;
+  // 更新序列号
+  int64 sequence_number = 3;
+}
+
+// 用户感知信息更新（光标位置、选择等）
+message AwarenessUpdate {
+  string client_id = 1;
+  // 用户信息 JSON 格式
+  string user_info = 2;
+  // 感知状态 JSON 格式（包含光标位置、选择范围等）
+  string awareness_state = 3;
+  // 时间戳
+  int64 timestamp = 4;
+}
+
+// 加入文档
+message JoinDocument {
+  string user_id = 1;
+  string user_name = 2;
+  string user_color = 3;
+  map<string, string> user_metadata = 4;
+}
+
+// 离开文档
+message LeaveDocument {
+  string user_id = 1;
+}
+
+// 心跳消息
+message HeartBeat {
+  int64 timestamp = 1;
+}
+
+// 用户加入通知
+message UserJoined {
+  string user_id = 1;
+  string user_name = 2;
+  string user_color = 3;
+  string client_id = 4;
+  map<string, string> user_metadata = 5;
+}
+
+// 用户离开通知
+message UserLeft {
+  string user_id = 1;
+  string client_id = 2;
+}
+
+// 文档状态
+message DocumentState {
+  bytes state_vector = 1;
+  bytes document_data = 2;
+  repeated ActiveUser active_users = 3;
+  int64 last_modified = 4;
+}
+
+// 获取文档状态请求
+message GetDocumentStateRequest {
+  string document_id = 1;
+  string client_id = 2;
+}
+
+// 获取文档状态响应
+message GetDocumentStateResponse {
+  DocumentState document_state = 1;
+}
+
+// 获取活跃用户请求
+message GetActiveUsersRequest {
+  string document_id = 1;
+}
+
+// 获取活跃用户响应
+message GetActiveUsersResponse {
+  repeated ActiveUser active_users = 1;
+}
+
+// 活跃用户信息
+message ActiveUser {
+  string user_id = 1;
+  string user_name = 2;
+  string user_color = 3;
+  bool is_active = 4;
+  map<string, string> user_metadata = 5;
+}

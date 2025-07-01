@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+// 用于协同编辑文档内容合并
+package collaboration.sync;
+
+option go_package = "collaboration/sync";
+
+import "common/idl/common.proto";
+
+// 协同编辑服务
+service SyncService {
+  // 双向流式RPC，用于实时协同编辑
+  rpc Sync(stream ClientMessage) returns (stream ServerMessage);
+}
+
+// 客户端发送的消息
+message ClientMessage {
+  string user_id = 1;
+  string document_id = 2;
+  int64 timestamp = 3;
+
+  oneof content {
+    SyncRequest sync_request = 4;
+    UpdateMessage update = 5;
+  }
+}
+
+// 服务端发送的消息
+message ServerMessage {
+  string user_id = 1;
+  string document_id = 2;
+  int64 timestamp = 3;
+
+  oneof content {
+    SyncResponse sync_response = 4;
+    UpdateMessage update = 5;
+    common.BaseResp error = 6;
+  }
+}
+
+// Y.js 同步请求
+message SyncRequest {
+  // Y.js state vector
+  bytes state_vector = 1;
+}
+
+// Y.js 同步响应
+message SyncResponse {
+  // Y.js update binary data
+  bytes update_data = 1;
+}
+
+// Y.js 更新消息
+message UpdateMessage {
+  // Y.js update binary data
+  bytes update_data = 1;
+  // 更新序列号
+  int64 sequence_number = 3;
+}

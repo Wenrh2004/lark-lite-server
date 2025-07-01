@@ -3,7 +3,7 @@ package common;
 
 option go_package = "common";
 
-message BaseResponse {
+message BaseResp {
   int32 code = 1; // 0: success, other: error code
   string message = 2; // error message
 }

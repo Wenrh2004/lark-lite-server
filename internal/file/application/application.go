@@ -6,8 +6,8 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/spf13/viper"
 
+	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/file/fileservice"
 	"github.com/Wenrh2004/lark-lite-server/internal/file/adapter"
-	"github.com/Wenrh2004/lark-lite-server/kitex_gen/file/fileservice"
 	"github.com/Wenrh2004/lark-lite-server/pkg/application/server/job"
 	"github.com/Wenrh2004/lark-lite-server/pkg/application/server/rpc"
 	"github.com/Wenrh2004/lark-lite-server/pkg/log"

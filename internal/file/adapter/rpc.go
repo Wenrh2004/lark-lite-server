@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/file"
 	"github.com/Wenrh2004/lark-lite-server/internal/file/domain"
-	"github.com/Wenrh2004/lark-lite-server/kitex_gen/file"
 	"github.com/Wenrh2004/lark-lite-server/pkg/adapter"
 )
 

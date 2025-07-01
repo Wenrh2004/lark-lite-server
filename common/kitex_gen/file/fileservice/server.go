@@ -2,8 +2,9 @@
 package fileservice
 
 import (
-	file "github.com/Wenrh2004/lark-lite-server/kitex_gen/file"
 	server "github.com/cloudwego/kitex/server"
+
+	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/file"
 )
 
 // NewServer creates a server.Server with the given handler and options.

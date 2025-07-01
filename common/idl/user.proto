@@ -9,7 +9,7 @@ service UserService {
   rpc Register (RegisterRequest) returns (UserAuthInfoResponse);
   rpc Login    (LoginRequest)    returns (UserAuthInfoResponse);
   rpc Refresh  (RefreshRequest)  returns (AuthResponse);
-  rpc Update   (UpdateRequest)   returns (common.BaseResponse);
+  rpc Update   (UpdateRequest)   returns (common.BaseResp);
 // TODO: rpc GetUser (GetUserRequest) returns (GetUser);
   rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse);
 }
@@ -57,12 +57,12 @@ message UserAuthInfo {
 }
 
 message UserAuthInfoResponse {
-  common.BaseResponse resp = 1;
+  common.BaseResp resp = 1;
   UserAuthInfo user = 2;
 }
 
 message AuthResponse {
-  common.BaseResponse resp = 1;
+  common.BaseResp resp = 1;
   TokenPair token = 2;
 }
 

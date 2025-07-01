@@ -249,8 +249,8 @@ func (x *UserAuthInfo) GetToken() *TokenPair {
 }
 
 type UserAuthInfoResponse struct {
-	Resp *common.BaseResponse `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	User *UserAuthInfo        `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	Resp *common.BaseResp `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	User *UserAuthInfo    `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
 }
 
 func (x *UserAuthInfoResponse) Reset() { *x = UserAuthInfoResponse{} }
@@ -259,7 +259,7 @@ func (x *UserAuthInfoResponse) Marshal(in []byte) ([]byte, error) { return pruta
 
 func (x *UserAuthInfoResponse) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *UserAuthInfoResponse) GetResp() *common.BaseResponse {
+func (x *UserAuthInfoResponse) GetResp() *common.BaseResp {
 	if x != nil {
 		return x.Resp
 	}
@@ -274,8 +274,8 @@ func (x *UserAuthInfoResponse) GetUser() *UserAuthInfo {
 }
 
 type AuthResponse struct {
-	Resp  *common.BaseResponse `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
-	Token *TokenPair           `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	Resp  *common.BaseResp `protobuf:"bytes,1,opt,name=resp" json:"resp,omitempty"`
+	Token *TokenPair       `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
 }
 
 func (x *AuthResponse) Reset() { *x = AuthResponse{} }
@@ -284,7 +284,7 @@ func (x *AuthResponse) Marshal(in []byte) ([]byte, error) { return prutal.Marsha
 
 func (x *AuthResponse) Unmarshal(in []byte) error { return prutal.Unmarshal(in, x) }
 
-func (x *AuthResponse) GetResp() *common.BaseResponse {
+func (x *AuthResponse) GetResp() *common.BaseResp {
 	if x != nil {
 		return x.Resp
 	}
@@ -328,6 +328,6 @@ type UserService interface {
 	Register(ctx context.Context, req *RegisterRequest) (res *UserAuthInfoResponse, err error)
 	Login(ctx context.Context, req *LoginRequest) (res *UserAuthInfoResponse, err error)
 	Refresh(ctx context.Context, req *RefreshRequest) (res *AuthResponse, err error)
-	Update(ctx context.Context, req *UpdateRequest) (res *common.BaseResponse, err error)
+	Update(ctx context.Context, req *UpdateRequest) (res *common.BaseResp, err error)
 	GetUserInfo(ctx context.Context, req *GetUserInfoRequest) (res *GetUserInfoResponse, err error)
 }

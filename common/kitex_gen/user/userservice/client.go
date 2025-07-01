@@ -17,7 +17,7 @@ type Client interface {
 	Register(ctx context.Context, Req *user.RegisterRequest, callOptions ...callopt.Option) (r *user.UserAuthInfoResponse, err error)
 	Login(ctx context.Context, Req *user.LoginRequest, callOptions ...callopt.Option) (r *user.UserAuthInfoResponse, err error)
 	Refresh(ctx context.Context, Req *user.RefreshRequest, callOptions ...callopt.Option) (r *user.AuthResponse, err error)
-	Update(ctx context.Context, Req *user.UpdateRequest, callOptions ...callopt.Option) (r *common.BaseResponse, err error)
+	Update(ctx context.Context, Req *user.UpdateRequest, callOptions ...callopt.Option) (r *common.BaseResp, err error)
 	GetUserInfo(ctx context.Context, Req *user.GetUserInfoRequest, callOptions ...callopt.Option) (r *user.GetUserInfoResponse, err error)
 }
 
@@ -65,7 +65,7 @@ func (p *kUserServiceClient) Refresh(ctx context.Context, Req *user.RefreshReque
 	return p.kClient.Refresh(ctx, Req)
 }
 
-func (p *kUserServiceClient) Update(ctx context.Context, Req *user.UpdateRequest, callOptions ...callopt.Option) (r *common.BaseResponse, err error) {
+func (p *kUserServiceClient) Update(ctx context.Context, Req *user.UpdateRequest, callOptions ...callopt.Option) (r *common.BaseResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Update(ctx, Req)
 }
