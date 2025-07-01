@@ -45,6 +45,7 @@ import (
 // @Param data body UserAuthRequest true "登录参数"
 // @Success 200 {object} UserAuthResponseBody
 // @Router /v1/user/login [post]
+
 // @Summary 获取用户信息
 // @Description 获取当前登录用户的信息
 // @Tags 用户
@@ -63,6 +64,15 @@ import (
 // @Param data body UpdateUserRequest true "更新参数"
 // @Success 200 {object} UserAuthResponseBody
 // @Router /v1/user/update [put]
+
+// @Summary 文件上传
+// @Description 上传用户文件，返回可访问URL
+// @Tags 用户
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "上传文件"
+// @Success 200 {object} map[string]interface{}
+// @Router /v1/user/upload [post]
 func NewUserHTTPApplication(conf *viper.Viper, logger *log.Logger, handler *adapter.UserHandler) *http.Server {
 	h := http.NewServer(conf, logger)
 
