@@ -1,7 +1,13 @@
 package application
 
 import (
+	"fmt"
+
+	kitexregistry "github.com/cloudwego/kitex/pkg/registry"
+	kitexserver "github.com/cloudwego/kitex/server"
+	"github.com/hertz-contrib/swagger"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
 
 	"github.com/Wenrh2004/lark-lite-server/common/kitex_gen/user/userservice"
 	"github.com/Wenrh2004/lark-lite-server/internal/user/adapter"
@@ -11,7 +17,7 @@ import (
 )
 
 // NewUserHTTPApplication 创建用户应用程序
-// @title           Brain Hub API
+// @title           Lark Lite User Server API
 // @version         1.0.0
 // @description     This is a sample server celler server.
 // @termsOfService  http://swagger.io/terms/
@@ -30,6 +36,9 @@ import (
 func NewUserHTTPApplication(conf *viper.Viper, logger *log.Logger, handler *adapter.UserHandler) *http.Server {
 	h := http.NewServer(conf, logger)
 
+	url := swagger.URL(fmt.Sprintf("http://localhost%s%s/swagger/doc.json", conf.GetString("app.addr"), conf.GetString("app.base_url"))) // The url pointing to API definition
+	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
+
 	v1 := h.Group("/v1")
 
 	userGroup := v1.Group("/user")
@@ -38,11 +47,20 @@ func NewUserHTTPApplication(conf *viper.Viper, logger *log.Logger, handler *adap
 	userGroup.POST("/login", handler.Login)
 	userGroup.POST("/register", handler.Register)
 
+	// 需要认证的路由
+	// userGroup.Use(handler.AuthMiddleware())
+	// userGroup.GET("/info", handler.GetUserInfo)
+	// userGroup.PUT("/info", handler.UpdateUserInfo)
+	userGroup.POST("/logout", handler.Logout)
+
+	// 刷新用户令牌
+	userGroup.POST("/refresh", handler.Refresh)
+
 	return h
 }
 
-func NewUserRPCApplication(conf *viper.Viper, logger *log.Logger, handler *adapter.UserServiceImpl) *rpc.Server {
-	server := userservice.NewServer(handler)
+func NewUserRPCApplication(conf *viper.Viper, logger *log.Logger, r kitexregistry.Registry, handler *adapter.UserServiceImpl) *rpc.Server {
+	server := userservice.NewServer(handler, kitexserver.WithRegistry(r))
 	s := rpc.NewServer(server, logger)
 
 	return s

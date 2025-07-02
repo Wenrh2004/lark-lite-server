@@ -7,10 +7,19 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
+// Response 通用响应结构
+// @Description API通用响应格式
 type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
+	Code    int         `json:"code" example:"0" description:"响应状态码，0表示成功"`
+	Message string      `json:"message" example:"success" description:"响应消息"`
+	Data    interface{} `json:"data,omitempty" description:"响应数据"`
+}
+
+// ErrorResponse 错误响应
+// @Description API错误响应格式
+type ErrorResponse struct {
+	Code    int    `json:"code" example:"400" description:"错误状态码"`
+	Message string `json:"message" example:"请求参数错误" description:"错误消息"`
 }
 
 func HandlerSuccess(c *app.RequestContext, data interface{}) {

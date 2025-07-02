@@ -2,15 +2,10 @@ package http
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/hertz-contrib/swagger"
 	"github.com/spf13/viper"
-	swaggerFiles "github.com/swaggo/files"
-
-	// _ "github.com/Wenrh2004/lark-lite-server/docs"
 
 	"github.com/Wenrh2004/lark-lite-server/pkg/log"
 )
@@ -27,8 +22,7 @@ func NewServer(conf *viper.Viper, logger *log.Logger, opts ...Option) *Server {
 		server.WithHostPorts(conf.GetString("app.addr")),
 		server.WithBasePath(conf.GetString("app.base_url")),
 	)
-	url := swagger.URL(fmt.Sprintf("http://localhost%s%s/swagger/doc.json", conf.GetString("app.addr"), conf.GetString("app.base_url"))) // The url pointing to API definition
-	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
+
 	s := &Server{
 		Hertz:  h,
 		logger: logger,

@@ -20,7 +20,7 @@ func (u *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReques
 	if err != nil {
 		return nil, err
 	}
-	res.Resp = &common.BaseResponse{
+	res.Resp = &common.BaseResp{
 		Code:    0,
 		Message: "success",
 	}
@@ -45,7 +45,7 @@ func (u *UserServiceImpl) Login(ctx context.Context, req *user.LoginRequest) (re
 	if err != nil {
 		return nil, err
 	}
-	res.Resp = &common.BaseResponse{
+	res.Resp = &common.BaseResp{
 		Code:    0,
 		Message: "success",
 	}
@@ -69,7 +69,7 @@ func (u *UserServiceImpl) Refresh(ctx context.Context, req *user.RefreshRequest)
 	panic("implement me")
 }
 
-func (u *UserServiceImpl) Update(ctx context.Context, req *user.UpdateRequest) (res *common.BaseResponse, err error) {
+func (u *UserServiceImpl) Update(ctx context.Context, req *user.UpdateRequest) (res *common.BaseResp, err error) {
 	// TODO implement me
 	panic("implement me")
 }

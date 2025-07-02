@@ -12,6 +12,7 @@ type UserService interface {
 	Register(ctx context.Context, user *User) (*User, error)
 	GetUserByID(ctx context.Context, id uint64) (*User, error)
 	GetUser(ctx context.Context, user *User) (*User, error)
+	Refresh(ctx context.Context, refreshToken string) (*CertificatePair, error)
 }
 
 type userService struct {
@@ -61,6 +62,22 @@ func (u *userService) GetUserByID(ctx context.Context, id uint64) (*User, error)
 func (u *userService) GetUser(ctx context.Context, user *User) (*User, error) {
 	// TODO implement me
 	panic("implement me")
+}
+
+func (u *userService) Refresh(ctx context.Context, refreshToken string) (*CertificatePair, error) {
+	// 验证refresh token并获取用户ID
+	userID, err := u.srv.Jwt.ParseToken(refreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("[Domain.Service.User] parse refresh token: %w", err)
+	}
+
+	// 生成新的token pair
+	ack, rfk, err := u.srv.Jwt.GenTokenPair(userID.UserId)
+	if err != nil {
+		return nil, fmt.Errorf("[Domain.Service.User] generate token pair: %w", err)
+	}
+
+	return NewCertificatePair(ack, rfk, u.srv.Jwt.GetAckExpires(), u.srv.Jwt.GetRefreshExpires()), nil
 }
 
 func NewUserService(srv *domain.Service, repo UserRepository) UserService {
